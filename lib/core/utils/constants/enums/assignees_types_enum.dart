@@ -1,0 +1,4 @@
+enum AssigneesTypes {
+  project,
+  workspace
+}

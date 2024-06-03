@@ -1,0 +1,4 @@
+enum CreateProjectsEnum {
+  space,
+  folder,
+}

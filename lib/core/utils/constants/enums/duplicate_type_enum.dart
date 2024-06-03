@@ -1,0 +1,4 @@
+enum DuplicateTypeEnum {
+  everything,
+  custom,
+}

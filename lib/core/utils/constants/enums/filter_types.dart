@@ -1,0 +1,4 @@
+enum FilterTypes {
+  meMode,
+  assignees
+}

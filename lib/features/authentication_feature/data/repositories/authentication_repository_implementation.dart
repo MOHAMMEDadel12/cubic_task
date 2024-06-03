@@ -17,32 +17,6 @@ class AuthenticationRepositoryImplementation
     required this.authenticationLocalDataSource,
   });
 
-  /// Login
-  @override
-  Future<Either<CustomError, SuccessModel>> login({
-    required String email,
-    required String password,
-  }) async {
-    /// login user in remote data source
-    return await authenticationRemoteDataSource
-        .login(
-          email: email,
-          password: password,
-        )
-        .then(
-          (value) => value.fold(
-            (error) {
-              return Left(error);
-            },
-            (user) async {
-              /// save the user model in cache
-              await saveUserInLocalStorage(user);
-              return Right(SuccessModel());
-            },
-          ),
-        );
-  }
-
   /// Register
   @override
   Future<Either<CustomError, SuccessModel>> registerUser({
@@ -62,69 +36,8 @@ class AuthenticationRepositoryImplementation
               return Left(error);
             },
             (user) async {
-              /// save the user model in cache
-              await saveUserInLocalStorage(user);
               return Right(SuccessModel());
             },
-          ),
-        );
-  }
-
-  /// Save User In Local Storage
-  Future<Either<CustomError, SuccessModel>> saveUserInLocalStorage(
-      UserModel user) async {
-    try {
-      await authenticationLocalDataSource.saveUserModelInLocalStorage(
-        userMap: user,
-      );
-      SharedText.userModel = user;
-      return right(SuccessModel());
-    } catch (e) {
-      return left(
-        CustomError(
-          errorMessage: e.toString(),
-        ),
-      );
-    }
-  }
-
-  /// Forget Password
-  @override
-  Future<Either<CustomError, SuccessModel>> forgetPassword(
-      {required String email}) async {
-    return await authenticationRemoteDataSource
-        .forgetPassword(
-          email: email,
-        )
-        .then(
-          (value) => value.fold(
-            (error) => Left(CustomError(errorMessage: error.errorMessage)),
-            (success) => Right(
-              SuccessModel(),
-            ),
-          ),
-        );
-  }
-
-  /// Reset Password
-  @override
-  Future<Either<CustomError, SuccessModel>> resetPassword({
-    required String hashCode,
-    required String password,
-    required String confirmPassword,
-  }) async {
-    return await authenticationRemoteDataSource
-        .resetPassword(
-          hashCode: hashCode,
-          password: password,
-          confirmPassword: confirmPassword,
-        )
-        .then(
-          (value) => value.fold(
-            (error) => Left(CustomError(errorMessage: error.errorMessage)),
-            (success) => Right(
-              SuccessModel(),
-            ),
           ),
         );
   }

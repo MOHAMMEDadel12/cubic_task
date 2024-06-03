@@ -6,12 +6,6 @@ import 'package:flutter/material.dart';
 
 class RouteGenerator {
   static Route generateRoute(RouteSettings settings) {
-    var args = settings.arguments;
-
-    SharedText.deepLinkUrl = settings.name.toString();
-
-    debugPrint("the url is :  ${SharedText.deepLinkUrl}");
-
     switch (settings.name) {
       /// Login screen
       case RouteKeys.register:

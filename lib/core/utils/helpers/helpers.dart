@@ -126,48 +126,6 @@ class Helpers {
     return file64;
   }
 
-  /// Check User Auth Function
-  static checkUserAuth({
-    required BuildContext context,
-    required CustomError error,
-  }) {
-    if (error.statusCode == 401) {
-      SharedPreference.clearLocalStorage();
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        RouteKeys.login,
-        (route) => false,
-      );
-    } else {
-      Helpers.showCommonSnackBar(
-        context,
-        error.errorMessage,
-        SnackBarStatus.error,
-      );
-    }
-  }
-
-  /// Show Error In Get Case
-  static showErrorInGetCaseOrConnection({
-    required BuildContext context,
-    required CustomError error,
-    required VoidCallback onTap,
-  }) {
-    if (error.statusCode == 401) {
-      SharedPreference.clearLocalStorage();
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        RouteKeys.login,
-        (route) => false,
-      );
-    } else {
-      return CommonServerErrorWidget(
-        errorMessage: error.errorMessage,
-        onTap: onTap,
-      );
-    }
-  }
-
   /// Copy Text When Click
   static copyTextWhenCLick({required String text}) {
     Clipboard.setData(ClipboardData(

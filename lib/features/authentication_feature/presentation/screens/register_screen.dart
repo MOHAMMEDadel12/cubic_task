@@ -254,23 +254,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               height: 16.h,
                             ),
 
-                            /// Login
-                            CommonButton(
-                              hasBorder: true,
-                              buttonColor: AppColors.generalWhite,
-                              text: AppLocalizations.of(context)!.login,
-                              textColor: AppColors.generalBlack,
-                              textFontSize: AppFontSize.s14.sp,
-                              onTap: () {
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  RouteKeys.login,
-                                  (route) => false,
-                                );
-                              },
-                              isEnable: true,
-                            ),
-
                             /// Space
                             SizedBox(
                               height: 19.h,

@@ -1,3 +1,4 @@
+import 'package:cubic_task/features/authentication_feature/data/models/branch_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:cubic_task/core/local_data_source/shared_local_data_source.dart';
@@ -17,6 +18,8 @@ abstract class AuthenticationRemoteDataSource {
     required String email,
     required String password,
   });
+
+  Future<Either<CustomError, List<BranchModel>>> getBranches();
 }
 
 class AuthenticationRemoteDataSourceImplementation
@@ -63,6 +66,28 @@ class AuthenticationRemoteDataSourceImplementation
       );
 
       return Right(user);
+    } on CustomException catch (error) {
+      return Left(
+        CustomError(
+          errorMessage: error.errorMessage,
+          statusCode: error.statusCode,
+        ),
+      );
+    }
+  }
+
+  /// Register
+  @override
+  Future<Either<CustomError, List<BranchModel>>> getBranches() async {
+    try {
+      Response response = await DioHelper.getData(
+        url: EndPointKeys.getBranches,
+      );
+
+      List<BranchModel> branches =
+          branchesListFromJson(response.data['result']);
+
+      return Right(branches);
     } on CustomException catch (error) {
       return Left(
         CustomError(

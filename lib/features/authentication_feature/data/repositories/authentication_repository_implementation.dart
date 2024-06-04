@@ -1,3 +1,4 @@
+import 'package:cubic_task/features/authentication_feature/data/models/branch_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:cubic_task/core/models/success_model.dart';
 import 'package:cubic_task/core/network/errors/custom_error.dart';
@@ -37,6 +38,20 @@ class AuthenticationRepositoryImplementation
             },
             (user) async {
               return Right(SuccessModel());
+            },
+          ),
+        );
+  }
+
+  @override
+  Future<Either<CustomError, List<BranchModel>>> getBranches() async {
+    return await authenticationRemoteDataSource.getBranches().then(
+          (value) => value.fold(
+            (error) {
+              return Left(error);
+            },
+            (branches) async {
+              return Right(branches);
             },
           ),
         );

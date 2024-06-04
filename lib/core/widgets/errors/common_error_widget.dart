@@ -7,7 +7,6 @@ import 'package:cubic_task/core/widgets/text/common_text_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cubic_task/core/utils/constants/font_sizes.dart';
 
-
 class CommonErrorWidget extends StatelessWidget {
   final double imageWidth;
   final double imageHeight;
@@ -35,7 +34,7 @@ class CommonErrorWidget extends StatelessWidget {
           height: 8,
         ),
         CommonTextWidget(
-            text: AppLocalizations.of(context)!.somethingWentWrong,
+            text: "something went wrong",
             fontSize: AppFontSize.s16.sp,
             textColor: AppColors.steel),
 

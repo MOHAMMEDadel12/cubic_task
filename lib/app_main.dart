@@ -71,7 +71,7 @@ class _AppMainState extends State<AppMain> with WidgetsBindingObserver {
                     localizationsDelegates:
                         AppLocalizations.localizationsDelegates,
                     supportedLocales: AppLocalizations.supportedLocales,
-                    locale: const Locale('ar'),
+                    locale: LanguageCubit.get(languageContext).appLocal,
                     theme: ThemeCubit.get(themeContext).isLight
                         ? lightTheme
                         : darkTheme,

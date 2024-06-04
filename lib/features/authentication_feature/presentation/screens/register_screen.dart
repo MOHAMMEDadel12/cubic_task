@@ -1,7 +1,11 @@
+import 'package:cubic_task/core/cubits/Language_Cubit/language_cubit.dart';
+import 'package:cubic_task/core/cubits/Language_Cubit/language_states.dart';
 import 'package:cubic_task/core/rotues/route_keys.dart';
 import 'package:cubic_task/core/utils/constants/font_sizes.dart';
 import 'package:cubic_task/core/utils/constants/font_weights.dart';
 import 'package:cubic_task/core/utils/helpers/validators.dart';
+import 'package:cubic_task/core/widgets/images/common_asset_image_widget.dart';
+import 'package:cubic_task/core/widgets/images/common_network_svg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,9 +21,7 @@ import '../logic/register_cubit/register_states.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({
-    super.key,
-  });
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -47,236 +49,164 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: AppColors.generalWhite,
       body: GestureDetector(
-        onTap: () {
-          Helpers.hideKeyboard(context);
-        },
+        onTap: () => Helpers.hideKeyboard(context),
         child: BlocConsumer<RegisterCubit, RegisterStates>(
-          listener: (registerContext, registerState) {
-            // /// Register Error
-            // if (registerState is RegisterErrorState) {
-            //   Navigator.pop(context);
-            //   Helpers.showCommonSnackBar(
-            //     context,
-            //     registerState.customError.errorMessage,
-            //     SnackBarStatus.error,
-            //   );
-            // }
-            //
-            // /// Register Successful
-            // if (registerState is RegisterSuccessState) {
-            //   Navigator.pop(context);
-            //   registerCubit.init();
-            //   SocketCubit.stopService();
-            //   SocketCubit.initSocket();
-            //   if (SharedText.activeWorkspaceID.isEmpty) {
-            //     Navigator.pushNamedAndRemoveUntil(
-            //       context,
-            //       RouteKeys.enterWorkspaceName,
-            //       (route) => false,
-            //     );
-            //   } else {
-            //     Navigator.pushNamedAndRemoveUntil(
-            //       context,
-            //       RouteKeys.layoutKey,
-            //       (route) => false,
-            //     );
-            //   }
-            // }
-            //
-            // /// Register Loading
-            // if (registerState is RegisterLoadingState) {
-            //   Helpers.showLoaderWidget(context);
-            // }
+          listener: (context, state) {
+            // Add listener handlers here
           },
-          builder: (registerContext, registerState) {
-            return Container(
-              height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.only(bottom: 16.r),
-              child: SingleChildScrollView(
-                child: Form(
-                  key: registerCubit.formKey,
-                  child: Column(
-                    children: [
-                      /// Header
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 34.w),
-                        child: Column(
-                          children: [
-                            /// Name FormField
-                            CustomTextField(
-                              filledColor: registerCubit.isNameError
-                                  ? AppColors.errorBackground
-                                  : AppColors.generalWhite,
-                              isError: registerCubit.isNameError,
-                              showTitle: true,
-                              title: AppLocalizations.of(context)!.fullName,
-                              controller:
-                                  RegisterCubit.get(context).nameController,
-                              inputType: TextInputType.emailAddress,
-                              hintText:
-                                  AppLocalizations.of(context)!.enterYourName,
-                              onChanged: (p0) => registerCubit.setData(),
-                              validate: (value) {
-                                if (value!.isEmpty) {
-                                  registerCubit.isNameError = true;
-                                  return AppLocalizations.of(context)!
-                                      .nameIsRequired;
-                                } else if (!RegExp(r'[A-Za-z]')
-                                    .hasMatch(value)) {
-                                  registerCubit.isNameError = true;
-                                  return AppLocalizations.of(context)!
-                                      .nameMustStartWithCharacter;
-                                } else {
-                                  registerCubit.isNameError = false;
-                                  return null;
-                                }
-                              },
-                            ),
-
-                            /// Space
-                            SizedBox(
-                              height: 16.h,
-                            ),
-
-                            /// Email FormField
-                            CustomTextField(
-                                filledColor: registerCubit.isEmailError
-                                    ? AppColors.errorBackground
-                                    : AppColors.generalWhite,
-                                isError: registerCubit.isEmailError,
-                                showTitle: true,
-                                title: AppLocalizations.of(context)!.email,
-                                controller:
-                                    RegisterCubit.get(context).emailController,
-                                inputType: TextInputType.emailAddress,
-                                hintText:
-                                    AppLocalizations.of(context)!.testEmail,
-                                onChanged: (p0) =>
-                                    RegisterCubit.get(context).setData(),
-                                validate: (value) {
-                                  if (value!.isEmpty) {
-                                    registerCubit.isEmailError = true;
-                                    return AppLocalizations.of(context)!
-                                        .emailMustBeNotEmpty;
-                                  } else if (!Validators.emailRegExp
-                                      .hasMatch(value)) {
-                                    registerCubit.isEmailError = true;
-                                    return AppLocalizations.of(context)!
-                                        .emailIsInvalid;
-                                  } else {
-                                    registerCubit.isEmailError = false;
-                                    return null;
-                                  }
-                                }),
-
-                            /// Space
-                            SizedBox(
-                              height: 16.h,
-                            ),
-
-                            /// Password
-                            CustomTextField(
-                              filledColor: registerCubit.isPasswordError
-                                  ? AppColors.errorBackground
-                                  : AppColors.generalWhite,
-                              showTitle: true,
-                              title: AppLocalizations.of(context)!.password,
-                              controller:
-                                  RegisterCubit.get(context).passwordController,
-                              inputType: TextInputType.text,
-                              isPassword: true,
-                              hintText: AppLocalizations.of(context)!
-                                  .enterYourPassword,
-                              onChanged: (p0) =>
-                                  RegisterCubit.get(context).setData(),
-                              validate: (value) {
-                                if (!RegExp(
-                                        r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&*`()_+={}|~/<>,.;:،?!\\]).{8,}$')
-                                    .hasMatch(value!)) {
-                                  registerCubit.isPasswordError = true;
-                                  return AppLocalizations.of(context)!
-                                      .passwordRequirementsNotMet;
-                                } else {
-                                  registerCubit.isPasswordError = false;
-                                  return null;
-                                }
-
-                                // if (value!.length < 8) {
-                                //   registerCubit.isPasswordError = true;
-                                //   return AppLocalizations.of(context)!
-                                //       .passwordMustBeAtLeast8Characters;
-                                // }
-                                // else if (!RegExp(r'[0-9]').hasMatch(value)) {
-                                //   registerCubit.isPasswordError = true;
-                                //   return AppLocalizations.of(context)!
-                                //       .yourPasswordMustContainAtLeastOneNumber;
-                                // } else if (!RegExp(r'[A-Z]').hasMatch(value) ||
-                                //     !RegExp(r'[a-z]').hasMatch(value)) {
-                                //   registerCubit.isPasswordError = true;
-                                //   return AppLocalizations.of(context)!
-                                //       .yourPasswordMustHaveMixtureOfUppercaseAndLowercaseLetters;
-                                // } else if (!RegExp(r'[#?!@$%^&*-./=+()]')
-                                //     .hasMatch(value)) {
-                                //   registerCubit.isPasswordError = true;
-                                //   return AppLocalizations.of(context)!
-                                //       .yourPasswordMustHaveAtLeastOnSpecialCharacter;
-                                // } else {
-                                //   registerCubit.isPasswordError = false;
-                                //   return null;
-                                // }
-                              },
-                            ),
-
-                            /// Space
-                            SizedBox(
-                              height: 84.h,
-                            ),
-
-                            /// Create Account
-                            CommonButton(
+          builder: (context, state) {
+            return SafeArea(
+                child: SingleChildScrollView(
+              child: Form(
+                key: registerCubit.formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 60.h,
+                    ),
+                    CommonTextWidget(
+                      text: "LOGO HERE",
+                      textColor: AppColors.topaz,
+                      fontSize: AppFontSize.s36.sp,
+                    ),
+                    SizedBox(
+                      height: 50.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 34.w),
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            filledColor: registerCubit.isNameError
+                                ? AppColors.errorBackground
+                                : AppColors.generalWhite,
+                            isError: registerCubit.isNameError,
+                            showTitle: true,
+                            title: AppLocalizations.of(context)!.fullName,
+                            controller: registerCubit.nameController,
+                            hintText:
+                                AppLocalizations.of(context)!.enterYourName,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return AppLocalizations.of(context)!
+                                    .nameCannotBeEmpty;
+                              } else if (!RegExp(r'^[a-zA-Z\s]+$')
+                                  .hasMatch(value)) {
+                                return AppLocalizations.of(context)!
+                                    .nameMustContainOnlyAlphabeticCharacters;
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomTextField(
+                            filledColor: registerCubit.isEmailError
+                                ? AppColors.errorBackground
+                                : AppColors.generalWhite,
+                            isError: registerCubit.isEmailError,
+                            showTitle: true,
+                            title: AppLocalizations.of(context)!.email,
+                            controller: registerCubit.emailController,
+                            hintText:
+                                AppLocalizations.of(context)!.enterYourEmail,
+                            validate: (value) {
+                              if (!Validators.emailRegExp.hasMatch(value!)) {
+                                return AppLocalizations.of(context)!
+                                    .pleaseEnterAValidEmail;
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomTextField(
+                            filledColor: registerCubit.isPhoneError
+                                ? AppColors.errorBackground
+                                : AppColors.generalWhite,
+                            isError: registerCubit.isPhoneError,
+                            showTitle: true,
+                            title: AppLocalizations.of(context)!.phoneNumber,
+                            controller: registerCubit.phoneController,
+                            hintText: AppLocalizations.of(context)!
+                                .enterYourPhoneNumber,
+                            inputType: TextInputType.number,
+                            validate: (value) {
+                              if (!RegExp(r'^[0-9]{10}$').hasMatch(value!)) {
+                                return AppLocalizations.of(context)!
+                                    .pleaseEnterAValidPhoneNumber;
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 16.h),
+                          DropdownButtonFormField<String>(
+                            value: registerCubit.selectedBranchId,
+                            borderRadius: BorderRadius.circular(10),
+                            hint: Text(
+                                AppLocalizations.of(context)!.chooseBranch),
+                            onChanged: (newValue) {
+                              if (newValue != null) {
+                                registerCubit.setSelectedBranch(newValue);
+                              }
+                            },
+                            items: registerCubit.branches
+                                .map<DropdownMenuItem<String>>((branch) {
+                              return DropdownMenuItem<String>(
+                                value: branch.id,
+                                child: Text(branch.branchName.toString()),
+                              );
+                            }).toList(),
+                          ),
+                          SizedBox(height: 84.h),
+                          CommonButton(
                               buttonColor: AppColors.topaz,
                               text: AppLocalizations.of(context)!.createAccount,
                               textColor: AppColors.generalWhite,
                               textFontSize: AppFontSize.s14.sp,
                               onTap: () {
-                                Helpers.hideKeyboard(context);
                                 if (registerCubit.formKey.currentState!
                                     .validate()) {
-                                  RegisterCubit.get(context).register();
+                                  registerCubit.register();
                                 }
                               },
-                              isEnable: RegisterCubit.get(context)
-                                  .checkValidationBeforeRegister(),
+                              isEnable: true),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: InkWell(
+                              onTap: () {
+                                LanguageCubit.get(context).changeLang(
+                                    LanguageCubit.get(context).currentLang ==
+                                            'en'
+                                        ? 'ar'
+                                        : 'en',
+                                    context);
+                              },
+                              child: BlocBuilder<LanguageCubit, LanguageState>(
+                                builder: (context, state) {
+                                  final lang =
+                                      LanguageCubit.get(context).currentLang;
+                                  return CommonTextWidget(
+                                      underLine: true,
+                                      text:
+                                          lang == 'ar' ? 'English' : 'العربية',
+                                      fontSize: AppFontSize.s25.sp,
+                                      fontWeight: AppFontWeights.fw400,
+                                      textColor: AppColors.black);
+                                },
+                              ),
                             ),
-
-                            /// Space
-                            SizedBox(
-                              height: 16.h,
-                            ),
-
-                            /// Space
-                            SizedBox(
-                              height: 19.h,
-                            ),
-
-                            CommonTextWidget(
-                              text: AppLocalizations.of(context)!
-                                  .bySigningUpIAgree,
-                              fontSize: AppFontSize.s12.sp,
-                              textColor: AppColors.steel,
-                              softWrap: true,
-                              fontWeight: AppFontWeights.fw400,
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
-            );
+            ));
           },
         ),
       ),

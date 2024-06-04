@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class CommonServerErrorWidget extends StatelessWidget {
   final String errorMessage;
   final VoidCallback onTap;
@@ -28,7 +27,6 @@ class CommonServerErrorWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-
           CommonTextWidget(
             maxLines: 2,
             text: errorMessage,
@@ -44,7 +42,7 @@ class CommonServerErrorWidget extends StatelessWidget {
           /// Try Again
           CommonButton(
             buttonWidth: 202.w,
-            text: AppLocalizations.of(context)!.tryAgain,
+            text: "try again",
             textFontSize: 14.sp,
             onTap: onTap,
             isEnable: true,
